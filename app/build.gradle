@@ -16,6 +16,15 @@ apiKeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 android {
     compileSdkVersion 33
 
+    signingConfigs {
+        release {
+            storeFile file('/Volumes/VolDoHDDe1Tera/keystores/marvel_app_key_store')
+            storePassword 'umasenha'
+            keyAlias 'marvel-app'
+            keyPassword 'umasenha'
+        }
+    }
+
     defaultConfig {
         applicationId "com.example.marvelapp"
         minSdkVersion 23
@@ -31,8 +40,20 @@ android {
     }
 
     buildTypes {
+        debug{
+            applicationIdSuffix '.debug'
+            debuggable true
+        }
+        preProduction{
+            initWith debug
+            applicationIdSuffix '.preProduction'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-rules-preproduction.pro'
+        }
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -47,6 +68,7 @@ android {
     buildFeatures{
         viewBinding true
     }
+    namespace 'com.example.marvelapp'
 }
 
 dependencies {
