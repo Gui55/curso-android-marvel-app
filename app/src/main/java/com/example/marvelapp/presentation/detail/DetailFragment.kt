@@ -39,7 +39,6 @@ class DetailFragment : Fragment() {
         _binding = this
     }.root
 
-    @Suppress("MagicNumber")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val detailViewArg = args.detailViewArg
