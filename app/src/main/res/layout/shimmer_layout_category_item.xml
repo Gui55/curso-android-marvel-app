@@ -12,10 +12,10 @@
         android:layout_marginHorizontal="4dp"
         app:layout_constraintDimensionRatio="w, 3:4"
         android:scaleType="centerCrop"
+        android:background="@color/medium_grey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="contentDescription"
-        tools:srcCompat="@tools:sample/avatars"/>
+        tools:ignore="contentDescription"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

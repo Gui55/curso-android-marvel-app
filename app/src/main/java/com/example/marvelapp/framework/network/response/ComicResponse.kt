@@ -11,10 +11,9 @@ data class ComicResponse(
     val thumbnail: ThumbnailResponse
 )
 
-fun ComicResponse.toComicModel() : Comic {
+fun ComicResponse.toComicModel(): Comic{
     return Comic(
-        this.id,
-        "${this.thumbnail.path}.${this.thumbnail.extension}"
-            .replace("http", "https")
+        id = this.id,
+        imageUrl = this.thumbnail.getHttpsUrl()
     )
 }

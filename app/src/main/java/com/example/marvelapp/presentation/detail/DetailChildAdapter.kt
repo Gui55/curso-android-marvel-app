@@ -1,0 +1,49 @@
+package com.example.marvelapp.presentation.detail
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.marvelapp.databinding.ItemChildDetailBinding
+import com.example.marvelapp.framework.imageloader.ImageLoader
+
+class DetailChildAdapter(
+    private val detailChildList: List<DetailChildVE>,
+    private val imageLoader: ImageLoader
+) : RecyclerView.Adapter<DetailChildAdapter.DetailChildViewHolder>() {
+
+    class DetailChildViewHolder(
+        itemBinding: ItemChildDetailBinding,
+        private val imageLoader: ImageLoader
+    ): RecyclerView.ViewHolder(itemBinding.root){
+
+        private val imageCategory = itemBinding.imageItemCategory
+
+        companion object{
+            fun create(
+                parent: ViewGroup,
+                imageLoader: ImageLoader
+            ) : DetailChildViewHolder{
+                val itemBinding = ItemChildDetailBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+                return DetailChildViewHolder(itemBinding, imageLoader)
+            }
+        }
+
+        fun bind(detailChildVE: DetailChildVE){
+            imageLoader.load(
+                imageCategory,
+                detailChildVE.imageUrl
+            )
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailChildViewHolder {
+        return DetailChildViewHolder.create(parent, imageLoader)
+    }
+
+    override fun getItemCount() = detailChildList.size
+
+    override fun onBindViewHolder(holder: DetailChildViewHolder, position: Int) {
+        holder.bind(detailChildList[position])
+    }
+}
