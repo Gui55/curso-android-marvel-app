@@ -29,10 +29,10 @@ import org.mockito.junit.MockitoJUnitRunner
 import java.lang.IllegalStateException
 import java.lang.RuntimeException
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CharactersViewModelTest {
 
-    @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
@@ -57,7 +57,6 @@ class CharactersViewModelTest {
         charactersViewModel = CharactersViewModel(getCharactersUseCase)
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun `should validate the paging data object values when calling charactersPagingData`() =
         runTest{
@@ -71,7 +70,6 @@ class CharactersViewModelTest {
             assertNotNull(result.first())
         }
 
-    @ExperimentalCoroutinesApi
     @Test(expected = RuntimeException::class)
     fun `should throw an exception when the calling for the use case returns an exception`() =
         runTest {
