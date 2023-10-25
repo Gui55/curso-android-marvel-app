@@ -1,24 +1,15 @@
 package com.example.marvelapp.presentation.characters
 
 import androidx.paging.PagingData
-import androidx.paging.map
-import com.example.core.domain.model.Character
 import com.example.core.usecase.GetCharactersUseCase
 import com.example.test.MainCoroutineRule
 import com.example.test.model.CharacterFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -26,8 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import java.lang.IllegalStateException
-import java.lang.RuntimeException
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
