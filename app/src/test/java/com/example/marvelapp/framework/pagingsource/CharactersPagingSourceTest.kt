@@ -2,8 +2,7 @@ package com.example.marvelapp.framework.pagingsource
 
 import androidx.paging.PagingSource
 import com.example.core.data.repository.CharactersRemoteDataSource
-import com.example.marvelapp.factory.response.DataWrapperResponseFactory
-import com.example.marvelapp.framework.network.response.DataWrapperResponse
+import com.example.marvelapp.factory.response.CharacterPagingFactory
 import com.example.test.MainCoroutineRule
 import com.example.test.model.CharacterFactory
 import com.nhaarman.mockitokotlin2.any
@@ -18,17 +17,17 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CharactersPagingSourceTest{
 
-    @ExperimentalCoroutinesApi
     @get: Rule
     var mainCoroutineRule = MainCoroutineRule()
 
     @Mock
-    lateinit var remoteDataSource: CharactersRemoteDataSource<DataWrapperResponse>
+    lateinit var remoteDataSource: CharactersRemoteDataSource
 
-    private val dataWrapperResponseFactory = DataWrapperResponseFactory()
+    private val characterPagingFactory = CharacterPagingFactory()
 
     private val characterFactory = CharacterFactory()
 
@@ -39,12 +38,11 @@ class CharactersPagingSourceTest{
         charactersPagingSource = CharactersPagingSource(remoteDataSource, "")
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun `should return a success load result when load is called`() = runTest{
         //Arrange
         whenever(remoteDataSource.fetchCharacters(any()))
-            .thenReturn(dataWrapperResponseFactory.create())
+            .thenReturn(characterPagingFactory.create())
         //Act
         val result = charactersPagingSource.load(
             PagingSource.LoadParams.Refresh(
@@ -69,7 +67,6 @@ class CharactersPagingSourceTest{
         )
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun `should return an error load result when load is called`() = runTest {
         //Arrange

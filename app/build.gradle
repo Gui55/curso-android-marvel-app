@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.google.gms.google-services'
 }
 
 apply plugin: 'kotlin-kapt'
@@ -32,11 +33,16 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.example.marvelapp.CustomTestRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
 
         buildConfigField "String", "PUBLIC_KEY", apiKeyProperties["PUBLIC_KEY"]
         buildConfigField "String", "PRIVATE_KEY", apiKeyProperties["PRIVATE_KEY"]
         buildConfigField "String", "BASE_URL", '"https://gateway.marvel.com/v1/public/"'
+    }
+
+    testOptions{
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     buildTypes {
@@ -75,26 +81,25 @@ dependencies {
     implementation project(':core')
 
     // AndroidX
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Material design
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Navigation
-    def nav_version = '2.5.2'
+    def nav_version = '2.4.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     // ViewModel and LiveData
-    def lifecycle_version = "2.5.1"
+    def lifecycle_version = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
-    //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // Dagger Hilt
@@ -102,7 +107,7 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Room
-    def room_version = "2.4.3"
+    def room_version = '2.4.1'
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
@@ -117,13 +122,27 @@ dependencies {
 
     // Other Libs
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // Unit tests
-    testImplementation project(':test')
+    testImplementation project(":test")
     testImplementation "androidx.room:room-testing:$room_version"
 
     // Instrumentation tests
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    def espresso_version = '3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
+
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+
+    def fragment_version = '1.6.1'
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.9.3"
 }
