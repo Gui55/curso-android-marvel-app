@@ -1,15 +1,13 @@
 package com.example.marvelapp.presentation.characters
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -27,7 +25,21 @@ class CharactersFragment : Fragment() {
     private var _binding : FragmentCharactersBinding? = null
     private val binding : FragmentCharactersBinding get() = _binding!!
 
-    private lateinit var charactersAdapter : CharactersAdapter
+    private val charactersAdapter : CharactersAdapter by lazy{
+        CharactersAdapter(imageLoader){ character, view ->
+            val extras = FragmentNavigatorExtras(
+                view to character.name
+            )
+
+            val directions = CharactersFragmentDirections
+                .actionCharactersFragmentToDetailFragment(
+                    character.name,
+                    DetailViewArg(character.id, character.name, character.imageUrl)
+                )
+
+            findNavController().navigate(directions, extras)
+        }
+    }
 
     private val viewModel: CharactersViewModel by viewModels()
 
@@ -49,35 +61,27 @@ class CharactersFragment : Fragment() {
         initCharactersAdapter()
         observeInitialLoadState()
 
-        lifecycleScope.launch{
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.charactersPagingData("").collect{ pagingData ->
-                    charactersAdapter.submitData(pagingData)
+        viewModel.state.observe(viewLifecycleOwner){ uiState ->
+            when(uiState){
+                is CharactersViewModel.UiState.SearchResult -> {
+                    charactersAdapter.submitData(viewLifecycleOwner.lifecycle, uiState.data)
                 }
             }
         }
+        viewModel.searchCharacters()
     }
 
     private fun initCharactersAdapter(){
-        charactersAdapter = CharactersAdapter(imageLoader){ character, view ->
-            val extras = FragmentNavigatorExtras(
-                view to character.name
-            )
-
-            val directions = CharactersFragmentDirections
-                .actionCharactersFragmentToDetailFragment(
-                    character.name,
-                    DetailViewArg(character.id, character.name, character.imageUrl)
-                )
-
-            findNavController().navigate(directions, extras)
-        }
-        with(binding.recylerCharacters){
-            scrollToPosition(0)
+        postponeEnterTransition()
+        with(binding.recyclerCharacters){
             setHasFixedSize(true)
             adapter = charactersAdapter.withLoadStateFooter(
                 footer = CharactersLoadStateAdapter(charactersAdapter::retry)
             )
+            viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
         }
     }
 
