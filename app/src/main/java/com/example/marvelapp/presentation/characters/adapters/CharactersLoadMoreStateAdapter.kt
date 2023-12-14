@@ -1,20 +1,20 @@
-package com.example.marvelapp.presentation.characters
+package com.example.marvelapp.presentation.characters.adapters
 
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 
-class CharactersLoadStateAdapter(
+class CharactersLoadMoreStateAdapter(
     private val retry: () -> Unit
-) : LoadStateAdapter<CharactersLoadMoreStateViewHolder>() {
+) : LoadStateAdapter<CharactersRefreshStateViewHolder>() {
 
     override fun onBindViewHolder(
-        holder: CharactersLoadMoreStateViewHolder,
+        holder: CharactersRefreshStateViewHolder,
         loadState: LoadState) = holder.bind(loadState)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         loadState: LoadState
-    ) = CharactersLoadMoreStateViewHolder.create(parent, retry)
+    ) = CharactersRefreshStateViewHolder.create(parent, retry)
 
 }
